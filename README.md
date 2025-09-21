@@ -64,3 +64,8 @@ Clone the repository:
 git clone https://github.com/your-username/omr_evaluator.git
 cd omr_evaluator
 
+## create a virtual environment
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+
+
