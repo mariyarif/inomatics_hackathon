@@ -64,8 +64,40 @@ Clone the repository:
 git clone https://github.com/your-username/omr_evaluator.git
 cd omr_evaluator
 
-## create a virtual environment
+---
+
+##vcreate a virtual environment
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 
+## install dependencies
+pip install -r requirements.txt
 
+## Run the Application
+streamlit run frontend/app.py
+
+---
+## 🔹 Usage
+
+Open the app in your browser (Streamlit will show a local URL).
+
+Upload:
+An OMR sheet image (.jpg, .jpeg, .png)
+The Answer Key (.xlsx)
+Wait for the system to process the image.
+View results:
+Subject-wise and total scores
+Bubble overlay visualization
+Download results as CSV
+
+📦 Requirements
+
+See requirements.txt
+
+
+🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+Feel free to fork this repo and open a PR.
+
+✨ Built with ❤️ using Python & OpenCV
