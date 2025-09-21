@@ -36,7 +36,7 @@ if uploaded_file is not None and answer_key_file is not None:
     # Convert uploaded file to PIL Image
     image = Image.open(io.BytesIO(uploaded_file.read()))
     st.subheader("Uploaded OMR Sheet:")
-    st.image(image, caption="OMR Sheet", use_column_width=True)
+    st.image(image, caption="OMR Sheet", use_container_width=True)
 
     # Save uploaded files temporarily
     img_path = "temp_omr_image.png"
@@ -97,7 +97,7 @@ if uploaded_file is not None and answer_key_file is not None:
             thickness = 2
             cv2.rectangle(overlay_img, (x, y), (x + w, y + h), color, thickness)
 
-            # mark selected answer
+            # Mark selected answer
             option = detected_answers[idx] if idx < len(detected_answers) else None
             if option not in [None, 'ambiguous']:
                 cv2.putText(
@@ -107,7 +107,7 @@ if uploaded_file is not None and answer_key_file is not None:
 
         overlay_img_rgb = cv2.cvtColor(overlay_img, cv2.COLOR_BGR2RGB)
         st.subheader("Detected Bubbles Overlay:")
-        st.image(overlay_img_rgb, caption="Bubbles with selections", use_column_width=True)
+        st.image(overlay_img_rgb, caption="Bubbles with selections", use_container_width=True)
 
     # -------------------------------
     # Clean up temporary files
@@ -115,5 +115,3 @@ if uploaded_file is not None and answer_key_file is not None:
         os.remove(img_path)
     if os.path.exists(answer_key_path):
         os.remove(answer_key_path)
-
-
