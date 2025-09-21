@@ -1,11 +1,11 @@
 # Core OMR evaluation
+numpy>=1.22.0,<2.3         # compatible with Streamlit and OpenCV
 opencv-python-headless==4.12.0.88
 Pillow==9.5.0
-numpy>=2.0.0,<2.3.0
 pandas==2.1.0
 
 # Streamlit frontend
-streamlit>=2.11.0
+streamlit==1.26.1
 
 # Optional ML for ambiguous bubble detection
 scikit-learn==1.3.0
@@ -14,13 +14,6 @@ tensorflow==2.14.0
 # PDF handling (if needed)
 PyMuPDF==1.22.5
 pdfplumber==0.9.0
-
-# Utilities for logging & display
-rich==14.1.0
-markdown-it-py==4.0.0
-mdurl==0.1.2
-pygments==2.19.2
-
 
 
 
