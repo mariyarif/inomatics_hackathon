@@ -1,21 +1,34 @@
 # frontend/app.py
-
 import streamlit as st
 import pandas as pd
 from PIL import Image
 import io
 import os
+import sys
 import cv2
 import numpy as np
 
-# Import backend functions
-from backend.omr_eval import preprocess_image, correct_perspective, get_bubbles, classify_bubbles_to_options, load_answer_key, score_answers
+# -------------------------------
+# Ensure Streamlit can find backend folder
+sys.path.append(os.path.dirname(__file__))
 
+# Import backend functions
+from backend.omr_eval import (
+    preprocess_image,
+    correct_perspective,
+    get_bubbles,
+    classify_bubbles_to_options,
+    load_answer_key,
+    score_answers
+)
+
+# -------------------------------
 # Page setup
-st.set_page_config(page_title="OMR Evaluator", layout="wide")
+st.set_page_config(page_title="📄 OMR Evaluator", layout="wide")
 st.title("📄 OMR Evaluator")
 
-# 1️⃣ File uploader
+# -------------------------------
+# File uploader
 uploaded_file = st.file_uploader("Upload OMR Sheet Image", type=["jpg", "jpeg", "png"])
 answer_key_file = st.file_uploader("Upload Answer Key (Excel)", type=["xlsx"])
 
@@ -23,9 +36,9 @@ if uploaded_file is not None and answer_key_file is not None:
     # Convert uploaded file to PIL Image
     image = Image.open(io.BytesIO(uploaded_file.read()))
     st.subheader("Uploaded OMR Sheet:")
-    st.image(image, caption="OMR Sheet", width="stretch")
+    st.image(image, caption="OMR Sheet", use_column_width=True)
 
-    # Save the uploaded files temporarily
+    # Save uploaded files temporarily
     img_path = "temp_omr_image.png"
     image.save(img_path)
     answer_key_path = "temp_answer_key.xlsx"
@@ -37,7 +50,7 @@ if uploaded_file is not None and answer_key_file is not None:
     st.info("Processing image and scoring...")
 
     try:
-        # Preprocess
+        # Preprocess image
         thresh, original_img = preprocess_image(img_path)
         warped_img = correct_perspective(thresh, original_img)
 
@@ -67,7 +80,6 @@ if uploaded_file is not None and answer_key_file is not None:
         st.table(df_scores)
         st.markdown(f"**Total Score:** {total_score}")
 
-        # -------------------------------
         # CSV Download
         csv = df_scores.to_csv(index=False)
         st.download_button(
@@ -77,24 +89,31 @@ if uploaded_file is not None and answer_key_file is not None:
             mime="text/csv"
         )
 
-        # -------------------------------
         # Overlay detected bubbles
         overlay_img = warped_img.copy()
         for idx, c in enumerate(bubble_contours):
             x, y, w, h = cv2.boundingRect(c)
             color = (0, 255, 0)  # green for detected bubble
             thickness = 2
-            cv2.rectangle(overlay_img, (x, y), (x+w, y+h), color, thickness)
+            cv2.rectangle(overlay_img, (x, y), (x + w, y + h), color, thickness)
 
             # mark selected answer
             option = detected_answers[idx] if idx < len(detected_answers) else None
             if option not in [None, 'ambiguous']:
-                cv2.putText(overlay_img, option, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
+                cv2.putText(
+                    overlay_img, option, (x, y - 5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1
+                )
 
         overlay_img_rgb = cv2.cvtColor(overlay_img, cv2.COLOR_BGR2RGB)
         st.subheader("Detected Bubbles Overlay:")
-        st.image(overlay_img_rgb, caption="Bubbles with selections", width="stretch")
+        st.image(overlay_img_rgb, caption="Bubbles with selections", use_column_width=True)
 
+    # -------------------------------
     # Clean up temporary files
-    os.remove(img_path)
-    os.remove(answer_key_path)
+    if os.path.exists(img_path):
+        os.remove(img_path)
+    if os.path.exists(answer_key_path):
+        os.remove(answer_key_path)
+
+
