@@ -9,8 +9,8 @@ import cv2
 import numpy as np
 
 # -------------------------------
-# Ensure Streamlit can find backend folder
-sys.path.append(os.path.dirname(__file__))
+# Ensure Python can find backend folder (one level up)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import backend functions
 from backend.omr_eval import (
