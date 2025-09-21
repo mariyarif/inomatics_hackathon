@@ -1,5 +1,20 @@
-streamlit
-opencv-python
-numpy
-pillow
-scikit-learn
+# Core OMR evaluation
+opencv-python-headless==4.12.0.88
+Pillow==9.5.0
+numpy==1.26.0
+pandas==2.1.0
+
+# Streamlit frontend
+streamlit==1.26.1
+
+# Optional ML for ambiguous bubble detection
+scikit-learn==1.3.0
+tensorflow==2.14.0
+
+# PDF handling (if needed)
+PyMuPDF==1.22.5
+pdfplumber==0.9.0
+
+
+
+
